@@ -1,5 +1,6 @@
 import timeit
 import random
+import math
 
 def bubblesort(arr):
     n = len(arr)
@@ -80,6 +81,11 @@ def quicksort(arr: list):
     # concatenate less-than subarray, pivot, more-than array
     return quicksort(lt_arr) + [pivot] + quicksort(mt_arr)
 
+def round_sig_figs(num, sig_figs):
+    if num == 0:
+        return 0
+    return round(num, sig_figs - int(math.floor(math.log10(abs(num)))) - 1)
+
 
 def test(size) -> int:
     arr = list(range(size))
@@ -87,7 +93,9 @@ def test(size) -> int:
     mergesort(arr)
 
 n = 20
+timedict = {}
 for size in [10, 100, 1000, 10000]:
     time = timeit.timeit(lambda: test(size), number=n)
-    print(f"Size:{size}, Time:{time/n}s")
+    timedict[f'{size} runs'] = round_sig_figs(time, 3) / n
 
+print(timedict)
