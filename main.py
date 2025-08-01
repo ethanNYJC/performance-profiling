@@ -16,30 +16,16 @@ def bubblesort(arr):
 
     return arr
 
-def binary_search(arr, target, start, end):
-    while start <= end:
-        mid = (start + end) // 2
-        if arr[mid] > target:
-            end = mid - 1
-        else:
-            start = mid + 1
-    return start  # Index to insert
-
-def insertionsort_binary(arr):
+def insertionsort(arr):
     n = len(arr)
     for i in range(1, n):
         target = arr[i]
-        # 🔍 Find index where target should go
-        pos = binary_search(arr, target, 0, i - 1)
+        j = i-1
 
-        if arr[j] <= target:
-            continue
-
-        # ➡️ Shift elements to the right
-        for j in range(i, pos, -1):
-            arr[j] = arr[j - 1]
-
-        arr[pos] = target
+        while j >= 0 and arr[j] > target:
+            arr[j + 1] = arr[j]
+            j = j - 1
+        arr[j + 1] = target
 
     return arr
 
@@ -95,17 +81,13 @@ def quicksort(arr: list):
     return quicksort(lt_arr) + [pivot] + quicksort(mt_arr)
 
 
-n = 100
-arr = list(range(100))[1:]
-random.shuffle(arr)
+def test(size) -> int:
+    arr = list(range(size))
+    random.shuffle(arr)
+    mergesort(arr)
 
-def test() -> int:
-    """Test the performance of different sort algorithims on 1000 elements"""
-    insertionsort_binary(arr.copy())
+n = 20
+for size in [10, 100, 1000, 10000]:
+    time = timeit.timeit(lambda: test(size), number=n)
+    print(f"Size:{size}, Time:{time/n}s")
 
-# Note that the function should be passed to `timeit.timeit` without '()'
-# We don't want to call the function, instead we pass it to timeit.
-# timeit will call the function (without arguments) and measure the time taken.
-time = timeit.timeit(test, number=n)
-print(f'Total time taken for {n} runs: {time}')
-print("Average time taken (s):", time / n)
